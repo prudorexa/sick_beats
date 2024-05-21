@@ -3,7 +3,6 @@ from tkinter import messagebox, simpledialog
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
 
-# Replace with your Spotify API credentials
 CLIENT_ID = 'c8c42796a18144eb908ed405a5ae16ff'
 CLIENT_SECRET = '92d532c92e5247ea99b16694edcdb103'
 REDIRECT_URI = 'http://localhost:8888/callback'
