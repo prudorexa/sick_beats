@@ -3,10 +3,11 @@ from tkinter import messagebox, simpledialog
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
 
+# Replace with your Spotify API credentials
 CLIENT_ID = 'c8c42796a18144eb908ed405a5ae16ff'
 CLIENT_SECRET = '92d532c92e5247ea99b16694edcdb103'
 REDIRECT_URI = 'http://localhost:8888/callback'
-SCOPE = 'playlist-modify-public playlist-read-private'
+SCOPE = 'playlist-modify-public playlist-read-private user-modify-playback-state'
 
 class SpotifyApp:
     def __init__(self, master):
@@ -31,7 +32,7 @@ class SpotifyApp:
     
     def create_widgets(self):
         self.playlist_box = tk.Listbox(self.master, width=50)
-        self.playlist_box.grid(row=0, column=0, padx=10, pady=10, rowspan=6)
+        self.playlist_box.grid(row=0, column=0, padx=10, pady=10, rowspan=7)
         self.playlist_box.bind('<<ListboxSelect>>', self.on_playlist_select)
         
         tk.Label(self.master, text="Track URI:").grid(row=0, column=1, padx=10, pady=10)
@@ -42,9 +43,10 @@ class SpotifyApp:
         tk.Button(self.master, text="Remove Selected Track", command=self.remove_selected_track).grid(row=2, column=1, columnspan=2, pady=10)
         tk.Button(self.master, text="Reorder Track", command=self.reorder_track).grid(row=3, column=1, columnspan=2, pady=10)
         tk.Button(self.master, text="Fetch Playlists", command=self.fetch_playlists).grid(row=4, column=1, columnspan=2, pady=10)
+        tk.Button(self.master, text="Play Track", command=self.play_track).grid(row=5, column=1, columnspan=2, pady=10)
         
         self.track_box = tk.Listbox(self.master, width=50)
-        self.track_box.grid(row=6, column=0, columnspan=3, padx=10, pady=10)
+        self.track_box.grid(row=7, column=0, columnspan=3, padx=10, pady=10)
     
     def on_playlist_select(self, event):
         w = event.widget
@@ -94,6 +96,15 @@ class SpotifyApp:
         if new_position is not None:
             self.sp.playlist_reorder_items(self.playlist_id, range_start=old_position, insert_before=new_position)
             self.fetch_tracks()
+
+    def play_track(self):
+        selected_track_index = self.track_box.curselection()
+        if not selected_track_index:
+            messagebox.showwarning("Selection Error", "No track selected!")
+            return
+        track_uri = self.playlist_tracks[selected_track_index[0]]['track']['uri']
+        self.sp.start_playback(uris=[track_uri])
+        messagebox.showinfo("Playing", f"Playing track: {self.playlist_tracks[selected_track_index[0]]['track']['name']}")
 
 if __name__ == "__main__":
     root = tk.Tk()
