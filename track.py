@@ -5,8 +5,6 @@ from tkinter import messagebox, simpledialog
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
 
-
-
 CLIENT_ID = 'c8c42796a18144eb908ed405a5ae16ff'
 CLIENT_SECRET = '92d532c92e5247ea99b16694edcdb103'
 REDIRECT_URI = 'http://localhost:8888/callback'
@@ -40,8 +38,8 @@ class SpotifyApp:
         redirect_uri=url_for('authorize', _external=True),
         scope="user-library-read user-top-read playlist-modify-public playlist-read-private user-modify-playback-state"
     ) 
-    
-    
+     
+
     def create_widgets(self):
         self.playlist_box = tk.Listbox(self.master, width=50)
         self.playlist_box.grid(row=0, column=0, padx=10, pady=10, rowspan=7)
