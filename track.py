@@ -1,6 +1,7 @@
 import os
 from flask import Flask, redirect, url_for, request, session
 import tkinter as tk
+import spotipy
 from tkinter import messagebox, simpledialog
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
@@ -113,10 +114,13 @@ class SpotifyApp:
             messagebox.showwarning("Selection Error", "No track selected!")
             return
         track_uri = self.playlist_tracks[selected_track_index[0]]['track']['uri']
-        self.sp.start_playback(uris=[track_uri])
-        messagebox.showinfo("Playing", f"Playing track: {self.playlist_tracks[selected_track_index[0]]['track']['name']}")
-
-   
+        try:
+            # Attempt to start playback
+            self.sp.start_playback(uris=[track_uri])
+            messagebox.showinfo("Playing", f"Playing track: {self.playlist_tracks[selected_track_index[0]]['track']['name']}")
+        except spotipy.exceptions.SpotifyException as e:
+            # Handle exceptions from the Spotify API
+            messagebox.showerror("Playback Error", f"Failed to start playback: {str(e)}")
 
 if __name__ == "__main__":
     root = tk.Tk()
