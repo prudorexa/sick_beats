@@ -115,11 +115,9 @@ class SpotifyApp:
             return
         track_uri = self.playlist_tracks[selected_track_index[0]]['track']['uri']
         try:
-            # Attempt to start playback
             self.sp.start_playback(uris=[track_uri])
             messagebox.showinfo("Playing", f"Playing track: {self.playlist_tracks[selected_track_index[0]]['track']['name']}")
         except spotipy.exceptions.SpotifyException as e:
-            # Handle exceptions from the Spotify API
             messagebox.showerror("Playback Error", f"Failed to start playback: {str(e)}")
 
 if __name__ == "__main__":
